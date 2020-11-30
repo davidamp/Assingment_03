@@ -1,6 +1,11 @@
 # Assingment_03
-Este documento README nos brinda los pasos para familiarizarse con Github, como usarlo y crear un repositorio.
-Nos iremos al siguiente enlace: https://github.com/ \\
-Primero, debemos crear un repositorio con un usuario y usamos los comandos init y add para inicializar y añadirr información. \\
-Segundo, usaremos los comandos commit (es la operación mediante la que se integran en el repositorio los cambios realizados en la copia local.) y push para poder acceder a los archivos, esto lo haremos desde nuestra consola. \\
-Y así, podemos crear nuestro repositorio en el cual podemos crear nuestros archivos que podemos bajarlos a nuestras consolas.
+En este repositorio encontraremos las herramientas y programas necesarios para resolver numéricamente una la Ecuación de Calor.
+Para este propósito hemos creador tools.h, donde se encuentran las principales funciones que usaremos para resolver este problema usando el método Implícito.
+
+
+Además en calor_explicito.c se encuentra el método de solución para la EDP usando la forma Explícita, donde usamos la función malloc y calloc, para los vectores y matriz respectivamente,  para generar espacio dinámico de memoria,pero que a su vez las entradas de la matriz solución se inicialicen en 0. 
+Creamos la función void arreglo, la cual nos da los puntos de la partición de un intervalo, dado un vector y la separación entre dichos puntos. 
+Además de la función int q, donde evaluamos la función que corresponde a la condición inicial.
+Usamos el esquema numérico visto en el curso de Análisis Numérico y finalmente se guardará la información solicitada en el archivo "datos_matriz.txt"
+Para graficar, se usará GNUPLOT, para esto se debe cambiar el Directorio en el menú y posterior poner el comando "plot 'datos_matriz.tx'" para visualizar la solución numérica en el tiempo dado por el usuario en el programa
+

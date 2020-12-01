@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <math.h>
 #include <time.h>
-
+// implicit method
 int main(){
 	// start variables
 	int i,j,k,n,m,d;

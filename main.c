@@ -5,52 +5,59 @@
 #include <time.h>
 
 int main(){
-	int j,k;
+	// start variables
+	int i,j,k,n,m,d;
 	int a=0;
 	int b=1;
+	int steps=10;
 	double PI = acos(-1.0);
-	int i, j, fila, columna,n,m;
-	//fila=10000;
-	//columna=10000;
-	double *xx, *tt;
+	double *xx, *tt, *bb, *NPx, *Nb;
+	double **q=NULL;
 	double **T=NULL;
-	/*double **P=NULL;
-	double **N=NULL;*/
-	double **A=NULL;
-	float dx,dt;
-	float coef;
+	double **P=NULL;
+	double **N=NULL;
+	double **NP=NULL;
+	//double **Nb=NULL;
+	
+	//double **A=NULL;
+	float dx,dt,coef,op,up,u;
 	
 	/************************** Discretización    ****************************** */
-	dx=0.01;   // Discretización en el espacio
+	dx=0.01;   // Discretización del espacio
 	n=1/dx;	 // n+1 es la cantidad de elementos en el array x
 	
-	dt=0.001;
+	dt=0.01; // Discretización del tiemppo
 	m=1/dt;
 	
-	coef = dt*n*n
+	coef = dt*n*n;
+	u = 1/(1+2*coef);
 	
 	
 	/* the pointers are inizilized */
-	xx = NULL;
-	tt = NULL;
-	T = NULL;
-	/*N = NULL;
-	P = NULL;*/
-	A = NULL;
+	xx = NULL; //space 
+	tt = NULL; //time 
+	NPx= NULL; 
+	Nb= NULL; 
+	T = NULL; //Numerical solution
+	N = NULL; //
+	P = NULL;
+	NP = NULL;
+	//A = NULL;
 
-
-	T = (double * *) malloc((n+1)*sizeof(double) );
-	if(T == NULL){
+	
+	/* Allocating memory space for the matrices */
+	T = (double * *) calloc((n+1)*sizeof(double),(m+1)*sizeof(double));
+	/*if(T == NULL){
 		perror("ERROR. There is not enough memory");
 		exit(EXIT_FAILURE);
 	}
 	for(j=0;j<n+1;i++){
-		T[j]=(double *) malloc((m+1)*sizeof(double))
+		T[j]=(double *) calloc((m+1)*sizeof(double));
 		if(T[j]==NULL){
 			perror("ERROR");
 			exit(EXIT_FAILURE);
 		}
-	}
+	}*/
 	
 	q = (double * *) malloc((n+1)*sizeof(double) );
 	if(q == NULL){
@@ -58,80 +65,144 @@ int main(){
 		exit(EXIT_FAILURE);
 	}
 	for(j=0;j<n+1;i++){
-		q[j]=(double *) malloc((m+1)*sizeof(double))
+		q[j]=(double *) malloc((m+1)*sizeof(double));
 		if(q[j]==NULL){
 			perror("ERROR");
 			exit(EXIT_FAILURE);
 		}
 	}	
-	/*
-	P = (double * *) malloc((n+1)*sizeof(double) );
+	
+	P = (double * *) malloc((n)*sizeof(double) );
 	if(P == NULL){
 		perror("ERROR. There is not enough memory");
 		exit(EXIT_FAILURE);
 	}
-	for(j=0;j<n+1;i++){
-		P[j]=(double *) malloc((n+1)*sizeof(double))
+	for(j=0;j<n;i++){
+		P[j]=(double *) malloc((n)*sizeof(double));
 		if(P[j]==NULL){
 			perror("ERROR");
 			exit(EXIT_FAILURE);
 		}
 	}
 	
-	N = (double * *) malloc((n+1)*sizeof(double) );
+	N = (double * *) malloc((n)*sizeof(double) );
 	if(N == NULL){
 		perror("ERROR. There is not enough memory");
 		exit(EXIT_FAILURE);
 	}
-	for(j=0;j<n+1;i++){
-		N[j]=(double *) malloc((n+1)*sizeof(double))
+	for(j=0;j<n;i++){
+		N[j]=(double *) malloc((n)*sizeof(double));
 		if(N[j]==NULL){
 			perror("ERROR");
 			exit(EXIT_FAILURE);
 		}
 	}
-	*/
-	A = (double * *) malloc((n+1)*sizeof(double) );
-	if(A == NULL){
+	
+	NP = (double * *) malloc((n)*sizeof(double) );
+	if(NP == NULL){
 		perror("ERROR. There is not enough memory");
 		exit(EXIT_FAILURE);
 	}
-	for(j=0;j<n+1;i++){
-		A[j]=(double *) malloc((n+1)*sizeof(double))
-		if(A[j]==NULL){
+	for(j=0;j<n;i++){
+		NP[j]=(double *) malloc((n)*sizeof(double));
+		if(NP[j]==NULL){
 			perror("ERROR");
 			exit(EXIT_FAILURE);
 		}
-	}	
+	}
+	
+	
 	/* Allocating memory space for the arrays */
 	xx = (double *) malloc((size_t) (n+1) * sizeof(double) );
 	tt = (double *) malloc((size_t) (m+1) * sizeof(double) );
+	bb = (double *) malloc((size_t) (n) * sizeof(double) );
+	Nb = (double *) malloc((size_t) (n) * sizeof(double) );
+	NPx = (double *) malloc((size_t) (n) * sizeof(double) );
 	
-
-	for(j=1;j<n;j++){
+	/* filling the arrays-matrices */
+	for(j=0;j<=n;j++){
 		xx[j] = j*dx;
 		T[j][0] = exp(xx[j]);
 	}
 	for(k=0;k<=m;k++){
 		tt[k] = k*dt;
-		T[0][k] = 0;
-		T[n][k] = 0;
 	}
 	for(j=0;j<=n;j++){
 		for(k=0;k<=m;k++){
 			q[j][k]=cos(PI*tt[k])*sin(PI*xx[j]);
 		}
-		A[j][j]= 1+2*coef
-		//N[j][j] = 1+2*coef
 	}
+	
+	/* 
+	to aproximate x=inv(A)b with Gauss Seidel, 
+	we make A = N-P so 
+	x_i+1 = inv(N)b+inv(N)P*x_i
+	*/
+	// fill the P lower triangular matrix
 	for(j=0;j<n;j++){
-		A[j][j+1]= -coef
-		A[j+1][j]= -coef
-		//N[j][j+1]= -coef
-		//P[j+1][j]= coef
+		printf("%d %d",j+1,j);
+		P[j+1][j]= coef;
 	}
 	
+	// filling the N upper bidiagonal matrix
+	op=u;
+	for(d=0;d<n;d++){
+		up=n-d;
+		for(i=0;i<up;i++){
+			//printf("%d %d",i,i+d);
+			N[i][i+d]=op;
+		}
+		op*=coef;
+	}
 	
-	//printf("%f" % q);
+	//fill inv(N)*P // matrix product
+	for(i=0;i<n;i++){
+		for(j=0;j<n;j++){
+			NP[i][j]=0.0E+0;
+			for(k=0;k<n;k++){
+				NP[i][j]+=N[i][k]*P[k][j];
+			}
+		}
+	}
+	// start the numerical procedure Tk+1 = inv(A)*b
+	for(k=0;k<n;k++){
+		//fill the b vector 
+		for(j=0;j<n;k++){
+			bb[j] = T[j+1][k]+q[j+1][k+1]*dt;
+		}
+		//do the product inv(N)*b
+		for(i=0;i<=n;i++){
+			Nb[i]=0.0E+0;
+			for(j=0;j<=n;j++){
+				Nb[i]+=N[i][j]*bb[j];
+			}
+		}
+		// start Gauss Seidel 
+		for(i=0;i<=steps;i++){
+			// i is the number of iterations
+			//Calculate inv(N)PTk+1
+			for(j=0;j<n;j++){
+				NPx[j]=0.0E+0;
+				for(i=0;i<=n;i++){
+					NPx[j]+=NP[j][i]*T[j+1][k+1];
+				}
+			}
+			//save Tk+1_i= inv(N)b+inv(N)PTk+1
+			for(j=0;j<=n;j++){
+				T[j][k+1]=Nb[j]+NPx[j];
+			}
+		}
+	}
+	/* EXPORT DATA */
+	FILE *fp= fopen("datos_matriz.txt","w");
+	if(fp==NULL){
+		printf("ERROR OPENING FILE!\n");
+		exit(1);
+	}
+	for(i=0;i<=n;i++){
+		fprintf(fp,"%f %f \n",xx[i],T[i][m/2]);
+	}
+	fclose(fp);
+	return 0;
 }
 

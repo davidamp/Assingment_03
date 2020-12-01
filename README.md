@@ -3,7 +3,7 @@ En este repositorio encontraremos las herramientas y programas necesarios para r
 Para este propósito hemos creador tools.h, donde se encuentran las principales funciones que usaremos para resolver este problema usando el método Implícito.
 
 
-Además en calor_explicito.c se encuentra el método de solución para la EDP usando la forma Explícita, donde usamos la función malloc y calloc, para los vectores y matriz respectivamente,  para generar espacio dinámico de memoria,pero que a su vez las entradas de la matriz solución se inicialicen en 0. 
+Además en calor_explicito.c se encuentra el método de solución para la EDP usando la forma Explícita, donde usamos la función malloc y calloc, para los vectores y matriz respectivamente,  para generar espacio dinámico de memoria, pero que a su vez las entradas de la matriz solución se inicialicen en 0. 
 Creamos la función void arreglo, la cual nos da los puntos de la partición de un intervalo, dado un vector y la separación entre dichos puntos. 
 Además de la función int q, donde evaluamos la función que corresponde a la condición inicial.
 Usamos el esquema numérico visto en el curso de Análisis Numérico y finalmente se guardará la información solicitada en el archivo "datos_matriz.txt"

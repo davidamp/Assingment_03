@@ -47,11 +47,11 @@ int main(){
 	
 	/* Allocating memory space for the matrices */
 	T = (double * *) calloc((n+1)*sizeof(double),(m+1)*sizeof(double));
-	/*if(T == NULL){
+	if(T == NULL){
 		perror("ERROR. There is not enough memory");
 		exit(EXIT_FAILURE);
 	}
-	for(j=0;j<n+1;i++){
+	/*for(j=0;j<n+1;i++){
 		T[j]=(double *) calloc((m+1)*sizeof(double));
 		if(T[j]==NULL){
 			perror("ERROR");
@@ -71,7 +71,8 @@ int main(){
 			exit(EXIT_FAILURE);
 		}
 	}	
-	
+	/***** AQUI hay un error. Si tu dato es un apuntador a apuntadores, tu arreglo es de apuntadores *****/
+	/** Seria P = (double * *) malloc((n)*sizeof(* double) );  **/
 	P = (double * *) malloc((n)*sizeof(double) );
 	if(P == NULL){
 		perror("ERROR. There is not enough memory");
@@ -84,7 +85,7 @@ int main(){
 			exit(EXIT_FAILURE);
 		}
 	}
-	
+	/****** LO MISMO AQUI *****/
 	N = (double * *) malloc((n)*sizeof(double) );
 	if(N == NULL){
 		perror("ERROR. There is not enough memory");

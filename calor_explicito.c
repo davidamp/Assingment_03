@@ -4,9 +4,18 @@
 #include <math.h>
 #include <time.h>
 
-
+/************** O B S E R V A S I O N E S *************/
+/**
+	Por ejemplo esta, y la otra función que tenian
+	mas abajo era la que tenian que poner en tools
+**/
 void arreglo(double *vector, double dx);
 
+/************** O B S E R V A S I O N E S *************/
+/**
+	Si ponen este prototipo aqui evitan el warning
+**/
+int q(double , double );
 
 int main(){
 	int i,j,k,n,m;
@@ -78,7 +87,7 @@ int main(){
 	}
 	
 	//Guardamos la información que queramos graficar
-	int tiempo=0.1;  //Para ver la solución numérica en t=0.1
+	int tiempo=0.0;  //Para ver la solución numérica en t=0.1
 	int columna_graficar=20000*0.1; //debemos colocarnos en esta columna
    	for(i = 0; i <n+1;i++){
     	fprintf (fp,"%f %f",vector_x[i], U[i][columna_graficar]); //guardamos en el archivo tanto la discretización x, como la solución numérica...
@@ -104,8 +113,13 @@ void arreglo(double *vector, double dx){
 
 int q(double x, double t){
 	double aux;
-
-	aux=cos(atan(1)*4*t)*sin(2*atan(1)*4*x);   //función q(x,t) propuesta en el deber
+/************** O B S E R V A S I O N E S *************/
+/**
+	Si ven el archivo math.h de sus sistema se dan cuanta
+	una cantidad de constantes definidas. Entre ellas esta
+	M_PI que es el valor de PI para la libreria
+**/
+	aux=cos(M_PI*4.0*t)*sin(2.0*M_PI*4.0*x);   //función q(x,t) propuesta en el deber
 	return aux;
 }
 

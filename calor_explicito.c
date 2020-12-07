@@ -86,6 +86,8 @@ int main(){
     	exit(1);
 	}
 	
+	
+	
 	//Guardamos la información que queramos graficar
 	int tiempo=0.0;  //Para ver la solución numérica en t=0.1
 	int columna_graficar=20000*0.1; //debemos colocarnos en esta columna
@@ -93,9 +95,15 @@ int main(){
     	fprintf (fp,"%f %f",vector_x[i], U[i][columna_graficar]); //guardamos en el archivo tanto la discretización x, como la solución numérica...
     	fprintf(fp,"\n");                                         //...para un tiempo dado
    	}
- 
+	
    /* close the file*/  
    fclose (fp);    //cerramos el archivo
+   
+   for(i=0;i<n+1;i++){
+		free(U[i]);
+	}
+	free(U);
+   
    return 0;
 	
 }
